@@ -25,7 +25,7 @@ class StoryPlayerActivity : AppCompatActivity(), MultiProgressBar.ProgressStepCh
     private val binding by lazy { ActivityStoryPlayerBinding.inflate(layoutInflater) }
     private var imageList: ArrayList<UserData> = arrayListOf()
     private var counter = 0
-    private val player by lazy { ExoPlayer.Builder(this).build() }
+    private lateinit var player :ExoPlayer
     private var pressTime = 0L
     private var limit = 500L
 
@@ -68,7 +68,6 @@ class StoryPlayerActivity : AppCompatActivity(), MultiProgressBar.ProgressStepCh
         imageList = intent.getParcelableArrayListExtra("IMAGEURLS")!!
 
         binding.stories.setProgressStepsCount(imageList.size)
-        binding.video.player = player
         binding.stories.setListener(this)
         binding.stories.start()
         if (isImageFile(imageList[counter])) {
@@ -91,6 +90,7 @@ class StoryPlayerActivity : AppCompatActivity(), MultiProgressBar.ProgressStepCh
                 onNext()
             }else{
                 finish()
+                stopPlayer()
             }
         }
 
@@ -138,7 +138,8 @@ class StoryPlayerActivity : AppCompatActivity(), MultiProgressBar.ProgressStepCh
         binding.image.visibility = View.GONE
         binding.video.visibility = View.VISIBLE
         binding.stories.pause()
-
+        player = ExoPlayer.Builder(this).build()
+        binding.video.player = player
         val mediaItem = MediaItem.fromUri(videoUri)
         player.addMediaItem(mediaItem)
         player.prepare()
@@ -167,12 +168,21 @@ class StoryPlayerActivity : AppCompatActivity(), MultiProgressBar.ProgressStepCh
     }
 
     private fun stopPlayer() {
-        player.playWhenReady = false
-        player.pause()
-        player.seekTo(0)
+        if(this::player.isInitialized) {
+            player.playWhenReady = false
+            player.pause()
+            player.stop()
+            player.release()
+        }
     }
 
     override fun onProgressFinished() {
         finish()
+        stopPlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stopPlayer()
     }
 }
