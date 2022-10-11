@@ -26,10 +26,10 @@ open class MainActivity : AppCompatActivity() {
 
         imageList.add(UserData("https://picsum.photos/id/237/200/300","image"))  // Image
         imageList.add(UserData("https://picsum.photos/seed/picsum/200/300","image")) // Image
-        imageList.add(UserData("https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_5mb.mp4","video")) // Video
         imageList.add(UserData("http://techslides.com/demos/sample-videos/small.mp4","video")) // Video
         imageList.add(UserData("https://picsum.photos/id/237/200/300","image")) // Image
         imageList.add(UserData("https://picsum.photos/seed/picsum/200/300","image")) // Image
+        imageList.add(UserData("https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_5mb.mp4","video")) // Video
 
         val data : ArrayList<User> = arrayListOf()
         data.add(User(imageList))
